@@ -1,8 +1,8 @@
 const needle = require('needle');
 
 const fetchBreedDescription = (breedName, callback) => {
-  
-  needle.get(`https://api.thecatapi.com/v1/breeds/search?q=${breedName}`, (error, response, body) => {
+  const link = `https://api.thecatapi.com/v1/breeds/search?q=${breedName}`;
+  needle.get(link, (error, response, body) => {
     if (error) {
       // Print the error if one occurred
       return callback(error, null);
