@@ -1,28 +1,24 @@
 const needle = require('needle');
-const readline = require('readline');
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-rl.question('Enter breed name: ', (breedName) => {
-
+const fetchBreedDescription = (breedName, callback) => {
+  
   needle.get(`https://api.thecatapi.com/v1/breeds/search?q=${breedName}`, (error, response, body) => {
     if (error) {
-      console.log('error:', error); // Print the error if one occurred
-      return;
+      // Print the error if one occurred
+      return callback(error, null);
     }
     if (response && response.statusCode !== 200) {
       console.log(response.statusCode);
     }
     if (!body || !Array.isArray(body) || body.length === 0) {
-      console.log("Breed not found");
+      return callback("Breed not found", null);
     } else {
       const catData = body[0];
-      console.log("Description: ", catData.description);
+      callback(null, catData.description);
     }
-    rl.close();
       
   });
-});
+};
+
+module.exports = { fetchBreedDescription };
+
